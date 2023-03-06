@@ -26,14 +26,20 @@
 	src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
 	integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 	crossorigin="anonymous"></script>
+	
+	
 <!-- resource end -->
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 
 
 </head>
 <body>
 	<jsp:include page="navbar.jsp"></jsp:include>
-	
-	
+
+
 	<div class="container">
 
 		<table class="table">
@@ -42,7 +48,7 @@
 					<th scope="col">ID</th>
 					<th scope="col">Username</th>
 					<th scope="col">Password</th>
-					<th scope="col">Role</th>
+				
 					<th scope="col">enable</th>
 					<th scope="col">Action</th>
 				</tr>
@@ -51,23 +57,33 @@
 			<tbody>
 				<c:forEach var="user" items="${USERS_LIST}" varStatus="counter">
 					<tr>
-						<td scope="row">
-						<c:out value="${counter.count}"></c:out>
-						</td>
-						
+						<td scope="row"><c:out value="${counter.count}"></c:out></td>
+
 						<td><c:out value="${user.username}"></c:out></td>
 						<td>${user.password}</td>
-						<td>${user.role}</td>
+					
 						<td>${user.enabled}</td>
-						<td>
-							<a href="edit/${user.userId}" class="btn btn-primary">Edit</a>
-							<a href="delete/${user.userId}" class="btn btn-danger">Delete</a>				
-						</td>
+						<td><a
+							href="${pageContext.request.contextPath}/user/edit?username=${user.username}"
+							class="btn btn-primary">Edit</a> <a
+							href="${pageContext.request.contextPath}/user/delete/${user.username}"
+							class="btn btn-danger">Delete</a></td>
 					</tr>
 				</c:forEach>
 
 			</tbody>
 		</table>
 	</div>
+	<c:if test="${not empty message}">
+
+		<script type="text/javascript">
+			swal({
+				title : 'error',
+				text : '${message}.',
+				timer : 2000,
+				button : false
+			});
+		</script>
+	</c:if>
 </body>
 </html>

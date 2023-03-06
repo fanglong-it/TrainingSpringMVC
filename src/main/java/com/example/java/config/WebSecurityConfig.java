@@ -5,23 +5,24 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
+@ComponentScan(basePackages = {"com.example.java"})
 @EnableWebSecurity
-@Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-//	@Autowired
-//	private DataSource dataSource;
-//	
+
 	@Bean
 	public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
@@ -41,45 +42,46 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
 		auth.jdbcAuthentication().passwordEncoder(new BCryptPasswordEncoder())
 		.dataSource(getDataSource())
-		.usersByUsernameQuery("select username, password, enabled from users where username=?")
-		.authoritiesByUsernameQuery("select username, role from users where username=?");
+		.usersByUsernameQuery("select username, password, enabled from user where username= ?")
+		.authoritiesByUsernameQuery("select user_username, authority from authorities where user_username= ?");
 	}
 	
-	
-	
+//	@Autowired
+//	private UserDetailsService userDetailsService;
+//	
+//	public DaoAuthenticationProvider authenticationProvider() {
+//		DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+//		
+//		authProvider.setUserDetailsService(userDetailsService);
+//		authProvider.setPasswordEncoder(passwordEncoder());
+//		return authProvider;
+//	}
+//	
+//	@Override
+//	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//			auth.authenticationProvider(authenticationProvider());
+//	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-//		http.authorizeRequests()
-//		.antMatchers("/homePage").access("hasRole('ROLE_USER')")
-//		.antMatchers("/user/**").permitAll()
-//		
-//		.and()
-//		.formLogin().loginPage("/login.html")
-//		.loginProcessingUrl("/loginPage")
-//		.usernameParameter("username").passwordParameter("password")
-//				.defaultSuccessUrl("/homePage")
-//				.failureUrl("/loginPage?error")
-//				
-//				.and().logout()
-//				.logoutSuccessUrl("/loginPage?logout")
-//				.and().csrf().disable();
 		
 		http.csrf().disable();
 		http.authorizeRequests()
 		
-		.antMatchers("/welcome", "/home","/").permitAll()
-		
-		.antMatchers("/user/**").access("hasRole('ROLE_USER')")
-		.antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+//		.antMatchers("/welcome", "/home","/").permitAll()
+//		.antMatchers("/user/**").access("hasRole('ROLE_USER')")
+//		.antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
 		.and()
-		.formLogin().loginPage("/dang-nhap").loginProcessingUrl("/login")
-			.usernameParameter("username").passwordParameter("password").defaultSuccessUrl("/user")
-			.failureUrl("/dang-nhap?error=failed")
+			.formLogin().loginPage("/dang-nhap")
+			.usernameParameter("username").passwordParameter("password")
+			.loginProcessingUrl("/login").defaultSuccessUrl("/")
+			.failureUrl("/dang-nhap?error=failed").permitAll()
+				
 				.and()
-				.logout().logoutUrl("/logout").logoutSuccessUrl("/dang-nhap")
-				.and()
-					.exceptionHandling().accessDeniedPage("/dang-nhap?error=deny");
+					.logout().logoutUrl("/dang-xuat").logoutSuccessUrl("/dang-nhap")
+					
+					.and()
+					.exceptionHandling().accessDeniedPage("/accessDenied");
 	}
 
 	@Override

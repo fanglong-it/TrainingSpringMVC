@@ -6,6 +6,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
+<%@ page isELIgnored="false"%>
 <title>Insert title here</title>
 <!-- resource start -->
 <link rel="stylesheet"
@@ -28,32 +29,34 @@
 <body>
 	<jsp:include page="navbar.jsp"></jsp:include>
 	<div class="container">
-		<form:form action="${pageContext.request.contextPath}/saveUser"
+		<form:form action="${pageContext.request.contextPath}/user/saveUser"
 			modelAttribute="user" method="POST">
-
-
-			<div class="form-group">
-				<form:hidden path="userId" />
-			</div>
 			<div class="form-group">
 				username
 				<form:input class="form-control" path="username" />
 			</div>
 			<div class="form-group">
 				password
-				<form:input class="form-control" path="password" />
+				<form:input class="form-control" path="password"/>
 			</div>
 			<div class="form-group">
-				roles
-				<form:input class="form-control" path="role" />
+				Re-Password
+				<input class="form-control" name="repassword"/>
 			</div>
 			<div class="form-group">
-				enabled
-				<form:checkbox path="enabled" value="true" />
+				<div class="row">
+					<div class="col-3">enabled</div>
+					<div class="col-3">
+						<form:checkbox class="form-control" path="enabled" value="true" />
+					</div>
+
+				</div>
 			</div>
-				
-				<input type="submit" class="btn btn-primary form-control" value="Submit" />
-		</form:form>
+	</div>
+
+	<input type="submit" class="btn btn-primary form-control"
+		value="Submit" />
+	</form:form>
 
 	</div>
 </body>

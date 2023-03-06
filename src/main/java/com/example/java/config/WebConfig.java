@@ -1,72 +1,81 @@
 
 package com.example.java.config;
 
-import java.util.List;
-
-import javax.naming.NamingException;
-import javax.sql.DataSource;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
+import org.springframework.http.MediaType;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.springframework.web.servlet.view.JstlView;
-import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
-import org.thymeleaf.spring5.view.ThymeleafViewResolver;
-import org.thymeleaf.templatemode.TemplateMode;
-import com.example.java.dao.UserDAO;
-import com.example.java.dao.impl.UserDAOImpl;
+import org.springframework.web.servlet.view.ResourceBundleViewResolver;
 
-@EnableWebMvc
+import com.example.java.excel.SubjectListExcelView;
+
 @Configuration
+@EnableWebMvc
 @ComponentScan("com.example.java")
 //@Import(value = { WebSecurityConfig.class })
-public class WebConfig extends WebMvcConfigurerAdapter {
+public class WebConfig{
 
-	@Bean
+	@Bean(name = "viewResolver2")
 	public InternalResourceViewResolver viewResolver() {
 		InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
-		viewResolver.setViewClass(JstlView.class);
 		viewResolver.setPrefix("/WEB-INF/views/jsp/");
 		viewResolver.setSuffix(".jsp");
 		return viewResolver;
 	}
 
-	//CSS resource
+	// CSS resource
 	public void addResourceHandler(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/resources/**")
-			.addResourceLocations("/resources/css/").setCachePeriod(31556926);
+		registry.addResourceHandler("/resources/**").addResourceLocations("/resources/css/").setCachePeriod(31556926);
+	}
+	
+	@Bean(name = "viewResolver1")
+	public ResourceBundleViewResolver resolver() {
+		ResourceBundleViewResolver resolver = new ResourceBundleViewResolver();
+		resolver.setOrder(1);
+		resolver.setBasename("views");
+		return resolver;
 	}
 	
 	
 
-	@Override
-	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
-		configurer.enable();
-	}
+//	@Override
+//	public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+//		configurer.favorPathExtension(false).favorParameter(true)
+//			.parameterName("mediaType")
+//			.ignoreAcceptHeader(true)
+//			.useJaf(false).defaultContentType(MediaType.APPLICATION_JSON)
+//			.mediaType("xml", MediaType.APPLICATION_XML)
+//			.mediaType("json", MediaType.APPLICATION_JSON);
+//	}
+	
+	
 	
 	
 
+//
+//	@Override
+//	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
+//		configurer.enable();
+//	}
+//	
 
+//	@Autowired
+//	DataSource dataSource;
 
-	@Autowired
-	DataSource dataSource;
-	
-	@Bean
-	public UserDAO userDAO() {
-		return new UserDAOImpl(dataSource);
-	}
-	
+//	@Bean
+//	public UserDAO userDAO() {
+//		return new UserDAOImpl(dataSource);
+//	}
+
+//	@Bean
+//	public AuthoritiesDAO authoritiesDAO(){
+//		return new AuthoritiesDAOImpl(dataSource);
+//	}
 
 //	
 

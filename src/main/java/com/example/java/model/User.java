@@ -1,39 +1,45 @@
 package com.example.java.model;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+
+@Entity
 public class User {
-	private int userId;
+	
+	@Id
 	private String username;
+	
 	private String password;
-	private String role;
+	
 	private boolean enabled;
 	
+	
+	@OneToMany(targetEntity = Authorities.class, fetch = FetchType.LAZY)
+	private List<Authorities> authorities = new ArrayList<>();
 	
 
 	public User() {
 		super();
 	}
 
+	
 
-
-	public User(int userId, String username, String password, String role, boolean enabled) {
+	public User(String username, String password, boolean enabled, List<Authorities> authorities) {
 		super();
-		this.userId = userId;
 		this.username = username;
 		this.password = password;
-		this.role = role;
 		this.enabled = enabled;
-	}
-
-
-
-	public int getUserId() {
-		return userId;
-	}
-
-
-
-	public void setUserId(int userId) {
-		this.userId = userId;
+		this.authorities = authorities;
 	}
 
 
@@ -42,34 +48,28 @@ public class User {
 		return username;
 	}
 
-
-
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
-
 
 	public String getPassword() {
 		return password;
 	}
 
-
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
+	
 
-
-	public String getRole() {
-		return role;
+	public List<Authorities> getAuthorities() {
+		return authorities;
 	}
 
 
 
-	public void setRole(String role) {
-		this.role = role;
+	public void setAuthorities(List<Authorities> authorities) {
+		this.authorities = authorities;
 	}
 
 
@@ -78,12 +78,8 @@ public class User {
 		return enabled;
 	}
 
-
-
 	public void setEnabled(boolean enabled) {
 		this.enabled = enabled;
 	}
-
-	
 
 }
