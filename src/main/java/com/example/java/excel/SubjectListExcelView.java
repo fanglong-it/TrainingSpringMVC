@@ -10,10 +10,11 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.web.servlet.view.document.AbstractXlsView;
+import org.springframework.web.servlet.view.document.AbstractXlsxView;
 
 import com.example.java.model.Subject;
 
-public class SubjectListExcelView extends AbstractXlsView {
+public class SubjectListExcelView extends AbstractXlsxView {
 
 	@Override
 	protected void buildExcelDocument(Map<String, Object> model, Workbook workbook, HttpServletRequest request,

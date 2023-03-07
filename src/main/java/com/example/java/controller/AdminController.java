@@ -29,7 +29,7 @@ import com.example.java.model.Subject;
 import com.example.java.pdf.SubjectPDFExport;
 import com.example.java.service.AuthorityService;
 import com.example.java.service.SubjectService;
-import com.lowagie.text.DocumentException;
+import com.itextpdf.text.DocumentException;
 
 @Controller
 public class AdminController {

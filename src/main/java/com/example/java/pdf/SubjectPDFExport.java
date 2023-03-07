@@ -7,18 +7,19 @@ import java.util.concurrent.Phaser;
 
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.hssf.usermodel.HeaderFooter;
+
 import com.example.java.model.Subject;
-import com.lowagie.text.Document;
-import com.lowagie.text.DocumentException;
-import com.lowagie.text.Font;
-import com.lowagie.text.FontFactory;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
-import com.lowagie.text.pdf.PdfPCell;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfTable;
-import com.lowagie.text.pdf.PdfWriter;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
 public class SubjectPDFExport {
 	private List<Subject> subjects;
@@ -29,11 +30,10 @@ public class SubjectPDFExport {
 
 	private void writeTableHeader(PdfPTable table) {
 		PdfPCell cell = new PdfPCell();
-		cell.setBackgroundColor(Color.blue);
+
 		cell.setPadding(5);
 
 		Font font = FontFactory.getFont(FontFactory.HELVETICA);
-		font.setColor(Color.white);
 
 		cell.setPhrase(new Phrase("Id", font));
 		table.addCell(cell);
@@ -63,13 +63,17 @@ public class SubjectPDFExport {
 	}
 
 	public void export(HttpServletResponse response) throws DocumentException, IOException {
-		Document document = new Document(PageSize.A4);
+		Document document = new Document(PageSize.A4.rotate());
+
 		PdfWriter.getInstance(document, response.getOutputStream());
 
 		document.open();
+
+//		ImageData
+
 		Font font = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
 		font.setSize(18);
-		font.setColor(Color.blue);
+//		font.setColor(Color.blue);
 
 		Paragraph p = new Paragraph("List of Subjects", font);
 		p.setAlignment(Paragraph.ALIGN_CENTER);
