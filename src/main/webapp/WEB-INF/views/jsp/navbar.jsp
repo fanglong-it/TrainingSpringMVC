@@ -25,18 +25,17 @@
 					<sec:authorize access="hasRole('ROLE_ADMIN')">
 						<li class="nav-item"><a class="nav-link"
 							href="/mvcdemo/admin/">Administrator</a></li>
-							
-							<li class="nav-item"><a class="nav-link"
+
+						<li class="nav-item"><a class="nav-link"
 							href="/mvcdemo/admin/manageSubject">Manage Subject</a></li>
 					</sec:authorize>
 					<sec:authorize access="isAuthenticated()">
 						<li class="nav-item"><a class="nav-link"
 							href="/mvcdemo/user/">Manager User</a></li>
 					</sec:authorize>
-					<li class="nav-item">
-						<a class="nav-link" href="/mvcdemo/subjects"/>Learning</a>
-					</li>
-					
+					<li class="nav-item"><a class="nav-link"
+						href="/mvcdemo/subjects" />Learning</a></li>
+
 				</ul>
 				<form class="form-inline my-2 my-lg-0">
 
@@ -53,6 +52,9 @@
 					<sec:authorize access="isAnonymous()">
 						<a href="/mvcdemo/dang-nhap"
 							class="btn btn-outline-primary my-2 my-sm-0"> Login </a>
+
+						<a href="/mvcdemo/dang-ky"
+							class="btn btn-outline-warning my-2 my-sm-0">Register</a>
 					</sec:authorize>
 
 				</form>

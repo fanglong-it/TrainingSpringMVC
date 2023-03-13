@@ -1,14 +1,20 @@
 package com.example.java.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "authorities")
 public class Authorities {
 
 	@Id
@@ -17,14 +23,14 @@ public class Authorities {
 
 	private String authority;
 
-	@ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
-	private User user;
+	@ManyToMany(mappedBy = "authorities")
+	private List<User> users = new ArrayList<>();
 
-	public Authorities(Long id, String authority, User user) {
+	public Authorities(Long id, String authority, List<User> users) {
 		super();
 		this.id = id;
 		this.authority = authority;
-		this.user = user;
+		this.users = users;
 	}
 
 	public Authorities() {
@@ -47,12 +53,20 @@ public class Authorities {
 		this.id = id;
 	}
 
-	public User getUser() {
-		return user;
+	public List<User> getUsers() {
+		return users;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
+
+//	public User getUser() {
+//		return user;
+//	}
+//
+//	public void setUser(User user) {
+//		this.user = user;
+//	}
 
 }

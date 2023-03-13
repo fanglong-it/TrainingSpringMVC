@@ -198,10 +198,12 @@ public class CreateExcelFile {
 
 	}
 
-	public static void calculateSummary(String[] summaryHeaders, HSSFSheet detail, HSSFRow summaryData) {
+	public static void calculateSummary(String[] summaryHeaders, HSSFSheet detail, HSSFRow summaryData,
+			int numberOfRowDetail) {
+		double totalCellData = 0;
 		for (int i = 1; i < summaryHeaders.length; i++) {
-			double totalCellData = 0;
-			for (int j = 1; j < 4; j++) {
+			totalCellData = 0;
+			for (int j = 1; j <= numberOfRowDetail; j++) {
 				HSSFRow dataRow = detail.getRow(j);
 				double cellData = Double.valueOf(dataRow.getCell(i).getStringCellValue());
 				totalCellData += cellData;
@@ -253,16 +255,17 @@ public class CreateExcelFile {
 			String[] dataDetails3 = { "DSS-CDG", "0", "0", "0", "0", "123", "0", "0", "789", "0", "0", "123123", "1",
 					"35000", "0", "551000", "1212", "35000", "0", "35000" };
 
-			
-
 			addDetails(dataDetails, workbook, detail, COLOR_WHITE, 1);
 			addDetails(dataDetails2, workbook, detail, COLOR_WHITE, 2);
 			addDetails(dataDetails3, workbook, detail, COLOR_WHITE, 3);
 
+			System.out.println("Number of row: " + detail.getLastRowNum());
+			int numberOfDetailRow = detail.getLastRowNum();
+
 			// Total Data of summary header
 			HSSFRow summaryData = summary.createRow(7);
 			summaryData.createCell(0).setCellValue("GRAND TOTAL");
-			calculateSummary(summaryHeaders, detail, summaryData);
+			calculateSummary(summaryHeaders, detail, summaryData, numberOfDetailRow);
 
 			FileOutputStream fileOut = new FileOutputStream(filename);
 			workbook.write(fileOut);

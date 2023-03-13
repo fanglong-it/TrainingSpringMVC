@@ -10,29 +10,27 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "user")
 public class User {
-	
+
 	@Id
 	private String username;
-	
+
 	private String password;
-	
+
 	private boolean enabled;
-	
-	
-	@OneToMany(targetEntity = Authorities.class, fetch = FetchType.LAZY)
+
+	@ManyToMany(targetEntity = Authorities.class, fetch = FetchType.LAZY)
 	private List<Authorities> authorities = new ArrayList<>();
-	
 
 	public User() {
 		super();
 	}
-
-	
 
 	public User(String username, String password, boolean enabled, List<Authorities> authorities) {
 		super();
@@ -41,8 +39,6 @@ public class User {
 		this.enabled = enabled;
 		this.authorities = authorities;
 	}
-
-
 
 	public String getUsername() {
 		return username;
@@ -60,19 +56,13 @@ public class User {
 		this.password = password;
 	}
 
-	
-
 	public List<Authorities> getAuthorities() {
 		return authorities;
 	}
 
-
-
 	public void setAuthorities(List<Authorities> authorities) {
 		this.authorities = authorities;
 	}
-
-
 
 	public boolean isEnabled() {
 		return enabled;

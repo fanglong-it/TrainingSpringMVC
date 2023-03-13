@@ -10,7 +10,7 @@ import com.example.java.repository.UserRepository;
 import com.example.java.service.UserService;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
 	@Autowired
 	UserRepository userRepository;
@@ -18,7 +18,10 @@ public class UserServiceImpl implements UserService{
 	@Override
 	public User getUserByUsername(String username) {
 		// TODO Auto-generated method stub
-		return userRepository.findById(username).get();
+		if (userRepository.existsById(username)) {
+			return userRepository.findById(username).get();
+		}
+		return null;
 	}
 
 	@Override
@@ -37,8 +40,5 @@ public class UserServiceImpl implements UserService{
 	public void deleteUser(String username) {
 		userRepository.deleteById(username);
 	}
-
-	
-	
 
 }

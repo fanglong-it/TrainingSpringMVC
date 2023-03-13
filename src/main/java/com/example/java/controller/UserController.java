@@ -1,18 +1,23 @@
 package com.example.java.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.example.java.model.Authorities;
 import com.example.java.model.User;
+import com.example.java.service.AuthorityService;
 import com.example.java.service.UserService;
 
 @Controller
@@ -21,7 +26,6 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@PreAuthorize("isAuthenticated()")
 	@RequestMapping("/user")
 	public ModelAndView homePageForUser(ModelAndView modelAndView) {
 		List<User> users = userService.getAllUser();
@@ -43,23 +47,40 @@ public class UserController {
 		return modelAndView;
 	}
 
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+	@Autowired
+	BCryptPasswordEncoder bCryptPasswordEncoder;
+
+	@Autowired
+	AuthorityService authorityService;
+
 	@RequestMapping("/user/saveUser")
 	public ModelAndView saveUser(@ModelAttribute User user, @RequestParam("repassword") String rePassword) {
-
 		ModelAndView modelAndView = new ModelAndView();
 		User oldUser = userService.getUserByUsername(user.getUsername());
-		if (rePassword != null && !rePassword.isEmpty()) {
-			if (!rePassword.equals(user.getPassword())) {
-				modelAndView.addObject("password_msg", "Password not Match!");
-				modelAndView.setViewName("redirect:/user/edit/" + user.getUsername());
-				return modelAndView;
+		if (oldUser != null) {
+
+			if (rePassword != null && !rePassword.isEmpty()) {
+				if (!rePassword.equals(user.getPassword())) {
+					modelAndView.addObject("password_msg", "Password not Match!");
+					modelAndView.setViewName("redirect:/user/edit/" + user.getUsername());
+					return modelAndView;
+				}
+			} else {
+				user.setPassword(oldUser.getPassword());
 			}
+
+			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+			userService.saveUser(user);
+			return new ModelAndView("redirect:/user");
 		} else {
-			user.setPassword(oldUser.getPassword());
+			List<Authorities> authorities = new ArrayList<>();
+			Authorities authority = authorityService.getAuthorities(1);
+			authorities.add(authority);
+			user.setAuthorities(authorities);
+			user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+			userService.saveUser(user);
+			return new ModelAndView("redirect:/user");
 		}
-		userService.saveUser(user);
-		return new ModelAndView("redirect:/user");
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")

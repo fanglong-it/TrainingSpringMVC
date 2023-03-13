@@ -10,10 +10,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import com.example.java.model.User;
 
 //@SessionAttributes({ "currentUser" })
 @Controller
@@ -29,36 +32,11 @@ public class LoginController {
 				model.addAttribute("error", "Username of Password is Incorrect!");
 			}
 		}
-
 		return "login";
 	}
 
-//	@RequestMapping(value = "/postLogin")
-//	public void postLogin(Model model, HttpSession session) {
-//		UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder
-//				.getContext().getAuthentication();
-//		validatePrinciple(authentication.getPrincipal());
-//
-//		User loggedInUser = ((UserDetailsDTO) authentication.getPrincipal()).getUserDetails();
-//		model.addAttribute("currentUser", loggedInUser.getUsername());
-//		session.setAttribute("userId", loggedInUser.getUsername());
-//	}
-//
-//	private void validatePrinciple(Object principal) {
-//		if (!(principal instanceof UserDetailsDTO)) {
-//			throw new IllegalArgumentException("Principal can not be null!");
-//		}
-//	}
-
 	@RequestMapping(value = { "/home" }, method = RequestMethod.GET)
 	public ModelAndView home() {
-
-//		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//		if(auth != null) {
-//			Object principal = auth.getPrincipal();
-//			if()
-//		}
-
 		ModelAndView modelAndView = new ModelAndView();
 		modelAndView.setViewName("homePage");
 		return modelAndView;
@@ -76,6 +54,15 @@ public class LoginController {
 	@RequestMapping("/accessDenied")
 	public String accessDenied() {
 		return "accessDenied";
+	}
+
+	@RequestMapping("/dang-ky")
+	public ModelAndView register(HttpServletRequest request) {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("editUser");
+		User user = new User();
+		modelAndView.addObject("user", user);
+		return modelAndView;
 	}
 
 }
